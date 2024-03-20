@@ -38,15 +38,35 @@ def scrape_website(url):
 # Definir una ruta para tu API
 @app.route('/scrape', methods=['POST'])
 def scrape():
+    
+    # Obtener los datos JSON del cuerpo de la solicitud
+    data = request.json
+
+    # Verificar si se proporciona la clave 'url' en el JSON
+    if 'url' in data:
+        # Obtener la URL del JSON
+        url = data['url']
+
+        # Llamar a la función scrape_website con la URL
+        result = scrape_website(url)
+
+        # Devolver el resultado como JSON
+        return jsonify({'texto_extraido': result}, 201)
+    else:
+        return jsonify({'error': 'La clave "url" no se proporcionó en el cuerpo JSON'}, 400)
+    
+    
+    
+    
     # Obtener la URL de la solicitud POST
-    url = request.args.get('url')
-    print(url)
+    # url = request.args.get('url')
+    # print(url)
 
-    # Llamar a la función scrape_website con la URL
-    result = scrape_website(url)
+    # # Llamar a la función scrape_website con la URL
+    # result = scrape_website(url)
 
-    # Devolver el resultado como JSON
-    return jsonify({'texto_extraido': result}, 201)
+    # # Devolver el resultado como JSON
+    # return jsonify({'texto_extraido': result}, 201)
 
 @app.route('/hello/<name>')
 def name(name):
@@ -54,6 +74,6 @@ def name(name):
     return f'Hello, {name}!'
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
     
 
